@@ -1,35 +1,88 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+type Transitions = { [key: string]: {[key: string]: number} } ;
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+function buildTransitions(input: string): Transitions {
+  const reworkedText: string = input.replace(/[^\p{L}]/gu, "").toLowerCase();
+  const charArray: string[] = Array.from(reworkedText);
+  const transitions: Transitions = {};
+
+  for (let i = 0; i < charArray.length - 1; i++) {
+    const currentChar = charArray[i];
+    const nextChar = charArray[i + 1];
+
+    if(!transitions[currentChar]) {
+      transitions[currentChar] = {};
+    }
+
+    if(!transitions[currentChar][nextChar]) {
+      transitions[currentChar][nextChar] = 0;
+    }
+
+    transitions[currentChar][nextChar]++;
+  }
+
+  return transitions;
+}
+
+function findMostLikelyNextChar(letter: string, transitions: Transitions): string {
+  let mostPosibleNextChar = "";
+  let highestCount = 0;
+  const nextLettersObj = transitions[letter];
+  const nextLeeters = Object.keys(nextLettersObj);
+
+  for (let i = 0; i < nextLeeters.length; i++) {
+    const nextChar = nextLeeters[i];
+    const count = nextLettersObj[nextChar];
+
+    if (count > highestCount) {
+      highestCount = count;
+      mostPosibleNextChar = nextChar;
+    }
+  }
+
+  return mostPosibleNextChar
+}
+
+function App() {
+  const [inputText, setInputText] = useState<string>('');
+  const [userInput, setUserInput] = useState<string>('');
+  const [nextChar, setNextChar] = useState<string>('');
+  const [transitions, setTransitions] = useState<Transitions>({});
+
+  const handleTrain = () => {
+    const builtTransitions = buildTransitions(inputText);
+    setTransitions(builtTransitions);
+    console.log(transitions)
+  };
+  
+
+  return (  
+     <div className="App"> 
+      <div className='input-container'>
+        <input 
+          type="text"
+          placeholder='Въведи текс за убочение на алгоритъма'
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className='button-container'>
+        <button onClick={handleTrain}>Обучение</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <div className='output-container'>
+        <input 
+          type="text"
+          placeholder='Започни да пишеш'
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+        />
+      </div>
+    </div>
+      
   )
 }
 
 export default App
+
