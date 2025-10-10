@@ -26,14 +26,16 @@ function buildTransitions(input: string): Transitions {
   return transitions;
 }
 
-function findMostLikelyNextChar(letter: string, transitions: Transitions): string {
+function findMostLikelyNextChar(Pletter: string, transitions: Transitions): string {
+  const letter = Pletter.toLowerCase();
+  const nextLettersObj = transitions[letter];
+  if (!nextLettersObj) return ""
+  const nextLetters = Object.keys(nextLettersObj);
   let mostPosibleNextChar = "";
   let highestCount = 0;
-  const nextLettersObj = transitions[letter];
-  const nextLeeters = Object.keys(nextLettersObj);
 
-  for (let i = 0; i < nextLeeters.length; i++) {
-    const nextChar = nextLeeters[i];
+  for (let i = 0; i < nextLetters.length; i++) {
+    const nextChar = nextLetters[i];
     const count = nextLettersObj[nextChar];
 
     if (count > highestCount) {
@@ -45,6 +47,16 @@ function findMostLikelyNextChar(letter: string, transitions: Transitions): strin
   return mostPosibleNextChar
 }
 
+function getRandomChar(): string {
+  const alphabet = 'абвгдежзийклмнопрстуфхцчшщъьюя';
+  const randomIndex = Math.floor(Math.random() * alphabet.length);
+  return alphabet[randomIndex];
+}
+
+function isLetter(char: string): boolean {
+  return /^[\p{L}]$/u.test(char);
+}
+
 function App() {
   const [inputText, setInputText] = useState<string>('');
   const [userInput, setUserInput] = useState<string>('');
@@ -54,16 +66,32 @@ function App() {
   const handleTrain = () => {
     const builtTransitions = buildTransitions(inputText);
     setTransitions(builtTransitions);
-    console.log(transitions)
   };
   
+  const handleType = (value: string) => {
+    setUserInput(value);
+    const lastChar = value.slice(-1).toLowerCase();
+
+    if(lastChar && isLetter(lastChar)) {
+    
+      if(lastChar && transitions[lastChar]) {
+        const predictedChar = findMostLikelyNextChar(lastChar, transitions);
+        setNextChar(predictedChar);
+      } else {
+        const randomChar = getRandomChar();
+        setNextChar(randomChar);
+      }
+    }else {
+      setNextChar("");
+    }
+  }
 
   return (  
      <div className="App"> 
       <div className='input-container'>
         <input 
           type="text"
-          placeholder='Въведи текс за убочение на алгоритъма'
+          placeholder='Въведи текст за обучение на алгоритъма'
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
@@ -76,11 +104,10 @@ function App() {
           type="text"
           placeholder='Започни да пишеш'
           value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
+          onChange={(e) => handleType(e.target.value)}
         />
       </div>
     </div>
-      
   )
 }
 
