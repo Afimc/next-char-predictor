@@ -9,7 +9,8 @@
   color: #333;
 }
 
-.input-container input{
+/* Input containers */
+.input-container input {
   min-height: 300px;
 }
 
@@ -28,14 +29,16 @@
   font-size: 1rem;
   outline: none;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
-
-
-  &:focus {
-    border-color: #6b63ff46;
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
-  }
 }
 
+/* Focus styles (the original nested &:focus doesn't work in plain CSS) */
+.input-container input:focus,
+.ghost-input:focus {
+  border-color: #6b63ff46;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+/* Buttons */
 .button-container {
   margin-bottom: 2rem;
 }
@@ -49,13 +52,86 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease;
-
-  &:hover {
-    background: #5952d4;
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
 }
+
+.button-container button:hover {
+  background: #5952d4;
+  transform: translateY(-2px);
+}
+
+.button-container button:active {
+  transform: translateY(0);
+}
+
+/* --- Ghost suggestion overlay styles --- */
+.ghost-wrapper {
+  position: relative;
+  width: 100%;
+  /* No fixed height here — the real input defines the height */
+  overflow: hidden; /* keeps overlay clipped to rounded corners */
+}
+
+/* Keep the REAL input in normal flow so the wrapper has height */
+.ghost-input {
+  position: relative;       /* allows z-index */
+  z-index: 2;               /* above overlay */
+  padding: 1rem 1.2rem;
+  font: 1rem/1.4 monospace;
+  background: transparent;
+  color: transparent;       /* hide real text; overlay shows it */
+  caret-color: #333;        /* visible caret */
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  outline: none;
+  width: 100%;
+}
+
+/* The overlay sits on top of the input area, but under the caret */
+.ghost-overlay {
+  position: absolute;
+  z-index: 1;               /* under the real input caret/text */
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.2rem;     /* match input padding */
+  font: 1rem/1.4 monospace; /* keep widths aligned */
+  color: #333;
+  white-space: pre;
+  pointer-events: none;     /* clicks go to the input */
+  border-radius: 10px;
+}
+
+/* The hint character */
+.ghost-suggestion {
+  opacity: 0.35;
+}
+
+/* Flash the suggestion */
+@keyframes ghostBlink {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+/* Flash the suggestion */
+@keyframes ghostBlink {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+.ghost-suggestion {
+  animation: ghostBlink 0.9s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* (Optional) if you had this earlier, remove it or keep it ABOVE this rule:
+.ghost-suggestion { opacity: 0.35; }
+*/
+
+/* If you previously added a reduced-motion block and it disabled the animation,
+   you can comment it out while testing:
+@media (prefers-reduced-motion: reduce) {
+  .ghost-suggestion { animation: none; opacity: 0.5; }
+}
+*/
+
+
