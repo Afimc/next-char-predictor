@@ -1,4 +1,4 @@
-
+export type Lang = "en" | "bg";
 export type Transitions = { [key: string]: { [key: string]: number } };
 
 export interface Istore {

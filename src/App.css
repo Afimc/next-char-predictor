@@ -9,19 +9,48 @@
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #333;
 }
+.lang-switch {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.lang-switch button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform .1s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.lang-switch button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+
+.lang-switch button.active {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108,99,255,.2);
+}
 
 .app-intro {
   max-width: 800px;
+  min-height: 150px;
   text-align: center;
-  margin: 2rem auto;
-  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem ;
   font-size: 1rem;
   color: #333;
   background: linear-gradient(135deg, #f0f4ff, #e9f5f1);
-  /* border: 1px solid #e0e0e0; */
-  /* border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05); */
 }
+
 .app-intro strong {
   color: #6c63ff;
 }
@@ -34,23 +63,22 @@
   margin-bottom: 2rem;
 }
 
-.custom-textarea {
+.input-textarea {
   width: 100%;
-  padding: 1rem 1.2rem;
   border: 1px solid #d0d0d0;
   border-radius: 10px;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.8rem;
   outline: none;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
   min-height: 120px;
   resize: none;
-  overflow: hidden;
   background: #fff;
+  padding: 1rem;
 }
 
-.custom-textarea::placeholder {
+.input-textarea::placeholder {
   color: #999;
+  font-size: 1rem;
 }
 
 .button-container {
@@ -70,6 +98,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease;
+  min-width: 120px ;
 }
 
 .button-container button:hover {
@@ -96,59 +125,49 @@
   color: #c53030;
 }
 
-.custom-textarea:focus,
-.ghost-input:focus {
+.input-textarea:focus,
+.textarea:focus {
   border-color: #6b63ff46;
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
 }
 
-.ghost-wrapper {
+.output-container {
+  display: flex; 
+  flex-direction: column;
   position: relative;
-  width: 100%;
-  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
-.ghost-input {
-  position: relative;
-  z-index: 2;
+.ghostTextarea, 
+.textarea {
+  resize: none;
   width: 100%;
-  padding: 1rem 1.2rem;
-  font: 1rem/1.4 monospace;
-  background: transparent;
-  color: transparent;
-  caret-color: #333;
+  height: 5rem;
+  padding: 0.5rem;
   border: 1px solid #d0d0d0;
   border-radius: 10px;
   outline: none;
-  
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  background: transparent;
+
 }
 
-.ghost-input::placeholder {
-  color: #777;
-}
-
-.ghost-overlay {
+.textarea{
+  z-index: 2;
   position: absolute;
+}
+
+
+.ghostTextarea{
   z-index: 1;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  padding: 1rem 1.2rem;
-  font: 1rem/1.4 monospace;
-  color: #333;
-  white-space: pre;
-  pointer-events: none;
-  border-radius: 10px;
+  color: rgba(128, 128, 128, 0.477);
+  animation: ghostBlink 0.9s ease-in-out infinite;
+
 }
 
 @keyframes ghostBlink {
   0%, 100% { opacity: 0.25; }
   50%      { opacity: 1; }
-}
-
-.ghost-suggestion {
-  animation: ghostBlink 0.9s ease-in-out infinite;
-  will-change: opacity;
 }
 
 @media (max-width: 768px) {
