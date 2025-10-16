@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Istore } from "./core/types";
+import type { Istore } from "../types";
 
 export const store = create<Istore>()((set) => ({
     inputText: "",

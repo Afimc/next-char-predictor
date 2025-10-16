@@ -1,4 +1,4 @@
-import { randomiser } from "./config";
+import { RANDOMISER } from "./config";
 import type { Transitions } from "./types";
 
 function getRandomChar(transitions:Transitions): string {
@@ -13,18 +13,26 @@ function getRandomChar(transitions:Transitions): string {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function predictNextChar(letter: string, transitions: Transitions, rng: () => number = Math.random): string {
-  if (Math.random() < randomiser) return getRandomChar(transitions)
+function predictNextChar(letter: string, transitions: Transitions): string {
+  if (Math.random() < RANDOMISER) return getRandomChar(transitions)
 
-  const entries = Object.entries(transitions[letter]);
+  const nextMap = transitions[letter];
+  const entries = Object.entries(nextMap);
   let total = 0;
-  for (const [, c] of entries) total += c;
+
+  for (let i = 0; i < entries.length; i++) {
+    const count = entries[i][1];
+    total += count;
+  }
   if (total <= 0) return "";
 
-  const r = rng() * total;
+  const r = Math.random() * total;
   let acc = 0;
-  for (const [ch, c] of entries) {
-    acc += c;
+
+  for (let i = 0; i < entries.length; i++) {
+    const ch = entries[i][0];
+    const count = entries[i][1];
+    acc += count;
     if (r < acc) return ch;
   }
   return entries[entries.length - 1][0];
@@ -51,7 +59,6 @@ export function buildTransitions(input: string, min: number): Transitions {
     }
     transitions[currentChar][nextChar]++;
   }
-  console.log("Built transitions:", transitions);
   return transitions;
 }
 

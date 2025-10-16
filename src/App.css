@@ -10,6 +10,22 @@
   color: #333;
 }
 
+.app-intro {
+  max-width: 800px;
+  text-align: center;
+  margin: 2rem auto;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  color: #333;
+  background: linear-gradient(135deg, #f0f4ff, #e9f5f1);
+  /* border: 1px solid #e0e0e0; */
+  /* border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); */
+}
+.app-intro strong {
+  color: #6c63ff;
+}
+
 .input-container,
 .output-container {
   width: 60%;
@@ -104,6 +120,7 @@
   border: 1px solid #d0d0d0;
   border-radius: 10px;
   outline: none;
+  
 }
 
 .ghost-input::placeholder {

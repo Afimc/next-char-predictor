@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import "./App.css";
-import { minInputTextLength } from "./core/config";
+import { MIN_INPUT_TEXT_LENGTH, INTRO_TEXT_EN } from "./core/config";
 import { buildTransitions, predictFromLast } from "./core/helpers";
-import { store } from "./store";
+import { store } from "./core/store/store";
 
 function App() {
   const setTransitions = store((state) => state.setTransitions);
@@ -18,12 +18,12 @@ function App() {
 
   const isAllowedToTrain = useMemo(() => {
     const isDifferent = inputText !== lastTrainedText;
-    const hasEnough = inputText.length >= minInputTextLength;
+    const hasEnough = inputText.length >= MIN_INPUT_TEXT_LENGTH;
     return isDifferent && hasEnough;
-  }, [inputText, lastTrainedText, minInputTextLength]);
+  }, [inputText, lastTrainedText]);
 
   const handleTrain = () => {
-    const builtTransitions = buildTransitions(inputText, minInputTextLength);
+    const builtTransitions = buildTransitions(inputText, MIN_INPUT_TEXT_LENGTH);
     setTransitions(builtTransitions);
     setLastTrainedText(inputText);
   };
@@ -46,6 +46,9 @@ function App() {
 
   return (
     <div className="App">
+      <div className="app-intro">
+        <p> {INTRO_TEXT_EN.part1} <strong>Train</strong> {INTRO_TEXT_EN.part2} </p>
+      </div>
       <div className="input-container">
         <textarea
           className="custom-textarea"
@@ -58,8 +61,8 @@ function App() {
         <button onClick={handleTrain} disabled={!isAllowedToTrain}>
           Обучение
         </button>
-        <div className={inputText.length < minInputTextLength ? "counter warn" : "counter"}>
-          {inputText.length}/{minInputTextLength} букви необходими за обучение
+        <div className={inputText.length < MIN_INPUT_TEXT_LENGTH ? "counter warn" : "counter"}>
+          {inputText.length}/{MIN_INPUT_TEXT_LENGTH} букви необходими за обучение
         </div>
       </div>
       <div className="output-container">
