@@ -39,8 +39,9 @@ export function buildTransitions(input: string, min: number): Transitions {
     for (let i = 0; i < charArray.length - 2; i++) {
       const a = charArray[i];
       const b = charArray[i + 1];
-      const next = charArray[i + 2];
-      const key = a + b; 
+      const c = charArray[i + 2];
+      const next = charArray[i + 3];
+      const key = a + b + c; 
 
       if (!transitions[key]) transitions[key] = {};
       transitions[key][next] = (transitions[key][next] ?? 0) + 1;
@@ -53,8 +54,8 @@ export const predictFromLast = (value: string,transitions: Transitions) => {
   if (chars.length < 1) return "";
   if (Math.random() < RANDOMISER) return getRandomChar(transitions);
 
-  if (chars.length >= 2) {
-    const key = chars.slice(-2).join("");
+  if (chars.length >= 3) {
+    const key = chars.slice(-3).join("");
     const nextMap = transitions[key];
     if (nextMap) return weightedPick(nextMap);
   }

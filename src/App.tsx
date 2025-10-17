@@ -58,11 +58,11 @@ function App() {
     }
   };
 
-  function handleScroll() {
+  const handleScroll = () => {
     if (ghostTextareaRef.current && textareaRef.current) {
       ghostTextareaRef.current.scrollTop = textareaRef.current.scrollTop;
     }
-  }
+  };
 
   return (
     <div className="App">
