@@ -18,24 +18,26 @@ function App() {
 
   const [lastTrainedText, setLastTrainedText] = useState("");
   const [lang, setLang] = useState<Lang>(() => (localStorage.getItem("lang") as Lang) || "en");
-  const t = TEXTS[lang];
-  
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const ghostTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const t = TEXTS[lang];
+  
+  const isAllowedToTrain = useMemo(() => {
+    const isDifferent = inputText !== lastTrainedText;
+    const hasEnough = inputText.length >= MIN_INPUT_TEXT_LENGTH;
+    return isDifferent && hasEnough;
+  }, [inputText, lastTrainedText]);
   
   const toggleLang = (next: Lang) => {
     setLang(next);
     localStorage.setItem("lang", next);
   };
 
-  const isAllowedToTrain = useMemo(() => {
-    const isDifferent = inputText !== lastTrainedText;
-    const hasEnough = inputText.length >= MIN_INPUT_TEXT_LENGTH;
-    return isDifferent && hasEnough;
-  }, [inputText, lastTrainedText]);
-
   const handleTrain = () => {
-    const builtTransitions = buildTransitions(inputText, MIN_INPUT_TEXT_LENGTH);
+    const cleanInputTeext = inputText.replace(/\s+/g, " ")
+    const builtTransitions = buildTransitions(cleanInputTeext, MIN_INPUT_TEXT_LENGTH);
     setTransitions(builtTransitions);
     setLastTrainedText(inputText);
   };
@@ -59,7 +61,6 @@ function App() {
   function handleScroll() {
     if (ghostTextareaRef.current && textareaRef.current) {
       ghostTextareaRef.current.scrollTop = textareaRef.current.scrollTop;
-      ghostTextareaRef.current.scrollLeft = textareaRef.current.scrollLeft;
     }
   }
 

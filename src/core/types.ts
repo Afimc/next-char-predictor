@@ -1,5 +1,6 @@
 export type Lang = "en" | "bg";
-export type Transitions = { [key: string]: { [key: string]: number } };
+export type CharMap = { [key: string]: number };
+export type Transitions = { [key: string]: CharMap };
 
 export interface Istore {
   inputText: string;

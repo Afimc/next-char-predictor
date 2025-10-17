@@ -1,5 +1,5 @@
 import { RANDOMISER } from "./config";
-import type { Transitions } from "./types";
+import type { Transitions, CharMap } from "./types";
 
 function getRandomChar(transitions:Transitions): string {
   const keys = new Set<string>(Object.keys(transitions));
@@ -13,25 +13,15 @@ function getRandomChar(transitions:Transitions): string {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function predictNextChar(letter: string, transitions: Transitions): string {
-  if (Math.random() < RANDOMISER) return getRandomChar(transitions)
-
-  const nextMap = transitions[letter];
+function weightedPick(nextMap: CharMap): string {
   const entries = Object.entries(nextMap);
   let total = 0;
-
-  for (let i = 0; i < entries.length; i++) {
-    const count = entries[i][1];
-    total += count;
-  }
+  for (let i = 0; i < entries.length; i++) total += entries[i][1];
   if (total <= 0) return "";
-
   const r = Math.random() * total;
   let acc = 0;
-
   for (let i = 0; i < entries.length; i++) {
-    const ch = entries[i][0];
-    const count = entries[i][1];
+    const [ch, count] = entries[i];
     acc += count;
     if (r < acc) return ch;
   }
@@ -39,8 +29,6 @@ function predictNextChar(letter: string, transitions: Transitions): string {
 }
 
 export function buildTransitions(input: string, min: number): Transitions {
-  // const reworkedText: string = input.replace(/[^\p{L}]/gu, "").toLowerCase();
-  
   const charArray: string[] = Array.from(input);
 
   if (charArray.length < min) {
@@ -48,24 +36,29 @@ export function buildTransitions(input: string, min: number): Transitions {
   }
 
   const transitions: Transitions = {};
-  for (let i = 0; i < charArray.length - 1; i++) {
-    const currentChar = charArray[i];
-    const nextChar = charArray[i + 1];
-    if (!transitions[currentChar]) {
-      transitions[currentChar] = {};
-    }
-    if (!transitions[currentChar][nextChar]) {
-      transitions[currentChar][nextChar] = 0;
-    }
-    transitions[currentChar][nextChar]++;
+    for (let i = 0; i < charArray.length - 2; i++) {
+      const a = charArray[i];
+      const b = charArray[i + 1];
+      const next = charArray[i + 2];
+      const key = a + b; 
+
+      if (!transitions[key]) transitions[key] = {};
+      transitions[key][next] = (transitions[key][next] ?? 0) + 1;
   }
   return transitions;
 }
 
 export const predictFromLast = (value: string,transitions: Transitions) => {
-  const lastChar = value.slice(-1)
-  if (!lastChar) return "";
-  if (!transitions[lastChar]) return getRandomChar(transitions);
-  return predictNextChar(lastChar, transitions);
+ const chars = Array.from(value);
+  if (chars.length < 1) return "";
+  if (Math.random() < RANDOMISER) return getRandomChar(transitions);
+
+  if (chars.length >= 2) {
+    const key = chars.slice(-2).join("");
+    const nextMap = transitions[key];
+    if (nextMap) return weightedPick(nextMap);
+  }
+  
+  return getRandomChar(transitions);
 }
 
