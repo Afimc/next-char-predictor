@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { MIN_INPUT_TEXT_LENGTH } from "../core/config"
-import { buildTransitions } from "../core/helpers"
-import { store } from "../core/store/store";
+import { MIN_INPUT_TEXT_LENGTH } from "../../core/config"
+import { buildTransitions } from "../../core/helpers"
+import { store } from "../../core/store/store";
+import "./TrainButtonSection.css";
 
 interface ActionSectionProps {
   inputText: string;
@@ -9,7 +10,7 @@ interface ActionSectionProps {
   counterLabel: string;
 }
  
-function ActionSection({  
+function TrainButtonSection({  
   inputText,
   buttonTitle,
   counterLabel,
@@ -42,4 +43,4 @@ function ActionSection({
 
 }
 
-export default ActionSection
+export default TrainButtonSection

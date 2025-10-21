@@ -1,4 +1,5 @@
-import type { Lang } from "../core/types";
+import type { Lang } from "../../core/types";
+import "./LangSwitch.css";
 
 
 interface LangSwitchProps {

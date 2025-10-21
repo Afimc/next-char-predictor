@@ -6,9 +6,11 @@ export const store = create<Istore>()((set) => ({
     userInput: "",
     nextChar: "",
     transitions: {},
+    lastStats: null,
 
     setInputText: (text) => set({ inputText: text }),
     setUserInput: (text) => set({ userInput: text }),
     setNextChar: (char) => set({ nextChar: char }),
     setTransitions: (transitions) => set({ transitions }),
+    setLastStats: (stats) => set({ lastStats: stats }),
 }));

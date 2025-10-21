@@ -1,0 +1,59 @@
+.lang-switch {
+  position: fixed;
+  top: 1.5rem; 
+  right: 1.5rem; 
+  display: flex;
+  gap: 0.5rem;
+  z-index: 50;
+  background: #1e293b;
+  padding: 0.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  border: 1px solid #334155;
+}
+
+.lang-switch button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #334155;
+  background: #1e293b;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: all 150ms ease-in-out; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.lang-switch button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+  opacity: 0;
+  transition: opacity 150ms ease-in-out; 
+  z-index: -1;
+}
+
+.lang-switch button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+}
+
+.lang-switch button:hover::before {
+  opacity: 0.1;
+}
+
+.lang-switch button.active {
+  border-color: var(--primary-color);
+  background: #312e81;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}

@@ -1,7 +1,7 @@
-
 import { useRef } from "react";
-import { predictFromLast } from "../core/helpers";
-import { store } from "../core/store/store";
+import { predictFromLast } from "../../core/helpers";
+import { store } from "../../core/store/store";
+import './UserInteractArea.css';
 
 interface UserInteractAreaProps {
   nextChar?: string;
@@ -19,6 +19,7 @@ function UserInteractArea({
   const userInput = store((state) => state.userInput)
   const setUserInput = store((state) => state.setUserInput);
   const setNextChar = store((state) => state.setNextChar);
+  const setLastStats = store((state) => state.setLastStats);
     
   const textRef = useRef<HTMLTextAreaElement | null>(null);
   const ghostRef = useRef<HTMLTextAreaElement | null>(null);
@@ -31,8 +32,9 @@ function UserInteractArea({
 
     const handleType = (value: string) => {
     setUserInput(value);
-    const predicted = predictFromLast(value, transitions);
-    setNextChar(predicted);
+    const {char, stats} = predictFromLast(value, transitions);
+    setNextChar(char);
+    setLastStats(stats);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>)=> {
@@ -40,8 +42,9 @@ function UserInteractArea({
       e.preventDefault();
       const accepted = userInput + nextChar;
       setUserInput(accepted);
-      const predicted = predictFromLast(accepted, transitions);
-      setNextChar(predicted);
+      const {char, stats} = predictFromLast(accepted, transitions);
+      setNextChar(char);
+      setLastStats(stats);
     }
   };
 

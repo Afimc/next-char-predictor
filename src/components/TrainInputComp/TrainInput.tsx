@@ -1,3 +1,4 @@
+import './TrainInput.css';
 
 interface InputAreaProps {
   value: string;

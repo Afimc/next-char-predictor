@@ -7,4 +7,12 @@ export default {
   inputPlaceholder: "Въведи текст за обучение на алгоритъма",
   typePlaceholder: "Започни да пишеш",
   counterLabel: "букви необходими за обучение",
+  statistic:{
+    statisticsTitle: "Топ предсказания",
+    statNoPredictionsLabel: "Oще няма предсказания",
+    statInstructions: "Въведи поне 1 символа",
+    contextOrderLabel: " (базирано на последните {contextOrder} букви)",
+    labelOnRandom: "Буква на случаен принцип",
+  }
+
 };
